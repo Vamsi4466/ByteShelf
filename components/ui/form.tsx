@@ -5,11 +5,19 @@ import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 import {
   Controller,
+<<<<<<< HEAD
   FormProvider,
   useFormContext,
   type ControllerProps,
   type FieldPath,
   type FieldValues,
+=======
+  ControllerProps,
+  FieldPath,
+  FieldValues,
+  FormProvider,
+  useFormContext,
+>>>>>>> 98e0bae (added all features like authentication and dashboard and file uploading and all the required functionalities)
 } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
@@ -147,7 +155,11 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField()
+<<<<<<< HEAD
   const body = error ? String(error?.message ?? "") : children
+=======
+  const body = error ? String(error?.message) : children
+>>>>>>> 98e0bae (added all features like authentication and dashboard and file uploading and all the required functionalities)
 
   if (!body) {
     return null
