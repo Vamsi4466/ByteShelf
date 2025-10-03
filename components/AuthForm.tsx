@@ -92,7 +92,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                     </FormControl>
                   </div>
 
-                  <FormMessage className="shad-form-message" />
+                  <FormMessage className="text-gray-700" />
                 </FormItem>
               )}
             />

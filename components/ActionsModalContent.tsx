@@ -1,3 +1,5 @@
+"use client";
+
 import { Models } from "node-appwrite";
 import Thumbnail from "@/components/Thumbnail";
 import FormattedDateTime from "@/components/FormattedDateTime";
@@ -6,6 +8,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useState } from "react";
+import { constructFileUrl } from "@/lib/utils"; // to generate file link
 
 const ImageThumbnail = ({ file }: { file: Models.Document }) => (
   <div className="file-details-thumbnail">
@@ -45,20 +49,57 @@ interface Props {
 }
 
 export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
+  const [copied, setCopied] = useState(false);
+
+  // Construct shareable link for this file
+  const shareLink = constructFileUrl(file.bucketFileId);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // reset after 2 sec
+    } catch (err) {
+      console.error("Failed to copy link: ", err);
+    }
+  };
+
   return (
     <>
+      {/* Thumbnail */}
       <ImageThumbnail file={file} />
 
       <div className="share-wrapper">
+        {/* Share link field */}
+        <p className="subtitle-2 pl-1 text-light-100 mb-2">
+          Copy share link
+        </p>
+        <div className="flex gap-2 items-center mb-4">
+          <Input
+            type="text"
+            value={shareLink}
+            readOnly
+            className="share-input-field flex-1"
+          />
+          <Button onClick={handleCopy} className="min-w-[80px]">
+            {copied ? "Copied!" : "Copy"}
+          </Button>
+        </div>
+
+        {/* Email invite section */}
         <p className="subtitle-2 pl-1 text-light-100">
           Share file with other users
         </p>
         <Input
           type="email"
           placeholder="Enter email address"
-          onChange={(e) => onInputChange(e.target.value.trim().split(","))}
+          onChange={(e) =>
+            onInputChange(e.target.value.trim().split(","))
+          }
           className="share-input-field"
         />
+
+        {/* Already shared with */}
         <div className="pt-4">
           <div className="flex justify-between">
             <p className="subtitle-2 text-light-100">Shared with</p>
@@ -94,3 +135,4 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
     </>
   );
 };
+

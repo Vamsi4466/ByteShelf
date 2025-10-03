@@ -12,7 +12,7 @@ const config: Config = {
   		colors: {
   			brand: {
   				'100': '#EA6365',
-  				DEFAULT: '#FA7275'
+  				DEFAULT: '#333F4E'
   			},
   			red: '#FF7474',
   			error: '#b80000',
