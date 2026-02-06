@@ -18,17 +18,21 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
   return (
     <aside className="sidebar">
       <Link href="/">
-        {/* <Image
+        <Image
           src="/assets/icons/logo-full-brand.svg"
           alt="logo"
           width={160}
           height={50}
           className="hidden h-auto lg:block"
-        /> */}
+        />
 
-        <h1 className="hidden lg:block text-4xl mt-[-2px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r text-gray-300 text-center mt-20 tracking-tight drop-shadow-[0_4px_15px_rgba(124,58,237,0.3)] transition-transform duration-300 ease-in-out hover:scale-105 hover:drop-shadow-[0_6px_25px_rgba(124,58,237,0.5)]">
-              ByteShelf
-        </h1>
+        <Image
+          src="/assets/icons/logo-brand.svg"
+          alt="logo"
+          width={52}
+          height={52}
+          className="lg:hidden"
+        />
       </Link>
 
       <nav className="sidebar-nav">
