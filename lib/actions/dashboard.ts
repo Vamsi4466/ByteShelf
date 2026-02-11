@@ -23,8 +23,8 @@ declare interface DashboardStats {
     currentMonth: number;
     lastMonth: number;
   };
-  totalTrips: number;
-  tripsCreated: {
+  totalFiles: number;
+  filesCreated: {
     currentMonth: number;
     lastMonth: number;
   };
@@ -88,8 +88,8 @@ export const getUsersAndTripsStats = async (): Promise<DashboardStats> => {
                 endPrev
             )
         },
-        totalTrips: files.total,
-        tripsCreated: {
+        totalFiles: files.total,
+        filesCreated: {
             currentMonth: filterByDate(
                 files.documents,
                 'createdAt',

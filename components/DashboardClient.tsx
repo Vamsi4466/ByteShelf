@@ -51,9 +51,9 @@ const DashboardClient = ({
         />
         <StatsCard
           headerTitle="Total Files"
-          total={dashboardStats.totalTrips}
-          currentMonthCount={dashboardStats.tripsCreated.currentMonth}
-          lastMonthCount={dashboardStats.tripsCreated.lastMonth}
+          total={dashboardStats.totalFiles}
+          currentMonthCount={dashboardStats.filesCreated.currentMonth}
+          lastMonthCount={dashboardStats.filesCreated.lastMonth}
         />
         {/* <StatsCard
           headerTitle="Active Users"
