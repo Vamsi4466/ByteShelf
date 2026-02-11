@@ -4,18 +4,24 @@ import Image from "next/image";
 import Search from "@/components/Search";
 import FileUploader from "@/components/FileUploader";
 import { signOutUser } from "@/lib/actions/user.actions";
+import Link from "next/link";
 
 const Header = ({
   userId,
   accountId,
+  status,
 }: {
   userId: string;
   accountId: string;
+  status: string;
 }) => {
   return (
     <header className="header">
       <Search />
       <div className="header-wrapper">
+        {status === "admin" && <Link href="/dashboard">
+          <p className="text-brand-100 hover:text-brand">AdminPanel</p>
+        </Link>}
         <FileUploader ownerId={userId} accountId={accountId} />
         <form
           action={async () => {

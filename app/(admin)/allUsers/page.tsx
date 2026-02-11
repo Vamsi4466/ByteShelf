@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getAllUsers } from '@/lib/actions/user.actions';
 import { formatBytes, formatDate } from '@/lib/utils';
 import SearchUsers from '@/components/SearchUsers';
+import { useSearchParams } from 'next/navigation';
 
 /* =======================
    Types
@@ -46,6 +47,9 @@ export default function AllUsersPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("query") || "";
+
   /* =======================
      Fetch users
   ======================= */
@@ -58,10 +62,10 @@ export default function AllUsersPage() {
         const { users, total } = await getAllUsers(
           pageSize,
           offset,
-          search
+          searchQuery
         );
 
-        setUsers(users as User[]);
+        setUsers(users as any);
         setTotal(total);
       } catch (err) {
         console.error('Failed to fetch users', err);
@@ -71,7 +75,7 @@ export default function AllUsersPage() {
     };
 
     fetchUsers();
-  }, [page, pageSize, search]);
+  }, [searchQuery]);
 
   /* =======================
      Sorting (client-side)
@@ -86,7 +90,7 @@ export default function AllUsersPage() {
       if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
-  }, [users, sortKey, sortOrder, search]);
+  }, [users, sortKey, sortOrder]);
 
   const totalPages = Math.ceil(total / pageSize);
 
@@ -122,12 +126,7 @@ export default function AllUsersPage() {
           </p>
         </div>
 
-        <SearchUsers
-          onSearch={(value) => {
-            setPage(1);
-            setSearch(value);
-          }}
-        />
+        <SearchUsers />
       </div>
 
       {/* Table */}

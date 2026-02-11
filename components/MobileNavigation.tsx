@@ -7,14 +7,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/FileUploader";
-import { signOutUser } from "@/lib/actions/user.actions";
+import { getCurrentUser, signOutUser } from "@/lib/actions/user.actions";
 
 interface NavItem {
   name: string;
@@ -110,6 +110,9 @@ const MobileNavigation = ({
           <Separator className="my-5 bg-light-200/20" />
 
           <div className="flex flex-col justify-between gap-5 pb-5">
+            {path === "user" && <Link href="/dashboard">
+              <p className="text-brand-100 hover:text-brand">AdminPanel</p>
+            </Link>}
             {path === "user" && <FileUploader ownerId={ownerId} accountId={accountId} />}
             <Button
               type="submit"
