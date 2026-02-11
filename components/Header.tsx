@@ -19,9 +19,9 @@ const Header = ({
     <header className="header">
       <Search />
       <div className="header-wrapper">
-        {status === "admin" && <Link href="/dashboard">
+        <Link href="/dashboard">
           <p className="text-brand-100 hover:text-brand">AdminPanel</p>
-        </Link>}
+        </Link>
         <FileUploader ownerId={userId} accountId={accountId} />
         <form
           action={async () => {
