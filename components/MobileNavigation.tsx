@@ -10,12 +10,16 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Separator } from "@radix-ui/react-separator";
-import { navItems } from "@/constants";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/FileUploader";
 import { signOutUser } from "@/lib/actions/user.actions";
+
+interface NavItem {
+  name: string;
+  url: string;
+}
 
 interface Props {
   $id: string;
@@ -23,6 +27,8 @@ interface Props {
   fullName: string;
   avatar: string;
   email: string;
+  navItems: NavItem[];
+  path: string,
 }
 
 const MobileNavigation = ({
@@ -31,6 +37,8 @@ const MobileNavigation = ({
   fullName,
   avatar,
   email,
+  navItems,
+  path,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -82,7 +90,7 @@ const MobileNavigation = ({
                       pathname === url && "shad-active",
                     )}
                   >
-                    <Image
+                    {icon && <Image
                       src={icon}
                       alt={name}
                       width={24}
@@ -91,7 +99,7 @@ const MobileNavigation = ({
                         "nav-icon",
                         pathname === url && "nav-icon-active",
                       )}
-                    />
+                    />}
                     <p>{name}</p>
                   </li>
                 </Link>
@@ -102,7 +110,7 @@ const MobileNavigation = ({
           <Separator className="my-5 bg-light-200/20" />
 
           <div className="flex flex-col justify-between gap-5 pb-5">
-            <FileUploader ownerId={ownerId} accountId={accountId} />
+            {path === "user" && <FileUploader ownerId={ownerId} accountId={accountId} />}
             <Button
               type="submit"
               className="mobile-sign-out-button"

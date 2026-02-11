@@ -26,6 +26,17 @@ export const navItems = [
   },
 ];
 
+export const adminNavItems = [
+  {
+    name:"Dashboard",
+    url: "/dashboard"
+  },
+  {
+    name: "AllUsers",
+    url: "/allUsers"
+  },
+];
+
 export const actionsDropdownItems = [
   {
     label: "Rename",

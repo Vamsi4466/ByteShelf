@@ -2,17 +2,25 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { navItems } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { signOutUser } from "@/lib/actions/user.actions";
+
+interface NavItem {
+  name: string;
+  icon?: string;
+  url: string;
+}
 
 interface Props {
   fullName: string;
   avatar: string;
   email: string;
+  navItems: NavItem[];
 }
 
-const Sidebar = ({ fullName, avatar, email }: Props) => {
+const Sidebar = ({ fullName, avatar, email, navItems }: Props) => {
   const pathname = usePathname();
 
   return (
@@ -45,7 +53,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
                   pathname === url && "shad-active",
                 )}
               >
-                <Image
+                {icon && <Image
                   src={icon}
                   alt={name}
                   width={24}
@@ -54,7 +62,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
                     "nav-icon",
                     pathname === url && "nav-icon-active",
                   )}
-                />
+                />}
                 <p className="hidden lg:block">{name}</p>
               </li>
             </Link>
@@ -81,6 +89,18 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         <div className="hidden lg:block">
           <p className="subtitle-2 capitalize">{fullName}</p>
           <p className="caption">{email}</p>
+        </div>
+        <div className="header-wrapper">
+          <Button type="submit" onClick={async () => await signOutUser()} className="sign-out-button">
+            <Image
+              src="/assets/icons/logout.svg"
+              alt="logo"
+              width={24}
+              height={24}
+              className="w-6"
+            />
+          </Button>
+          
         </div>
       </div>
     </aside>

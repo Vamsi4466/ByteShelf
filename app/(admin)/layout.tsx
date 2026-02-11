@@ -5,23 +5,22 @@ import Header from "@/components/Header";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
 import { Toaster } from "@/components/ui/toaster";
-import { navItems } from "@/constants";
+import { adminNavItems } from "@/constants";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) return redirect("/sign-in");
-  console.log(currentUser.status);
 
   return (
     <main className="flex h-screen">
-      <Sidebar {...currentUser} navItems={navItems} />
+      <Sidebar {...currentUser} navItems={adminNavItems} />
 
       <section className="flex h-full flex-1 flex-col">
-        <MobileNavigation {...currentUser} navItems={navItems} path="user" />
-        <Header userId={currentUser.$id} accountId={currentUser.accountId} />
+        <MobileNavigation {...currentUser} navItems={adminNavItems} path="admin" />
+        {/* <Header userId={currentUser.$id} accountId={currentUser.accountId} /> */}
         <div className="main-content">{children}</div>
       </section>
 

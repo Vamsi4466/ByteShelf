@@ -54,6 +54,24 @@ export const uploadFile = async ({
         handleError(error, "Failed to create file document");
       });
 
+    const fileSize = bucketFile.sizeOriginal;
+
+    const userDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      ownerId
+    );
+
+    await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      ownerId,
+      {
+        filesCount: (userDoc.filesCount || 0) + 1,
+        storageUsed: (userDoc.storageUsed || 0) + fileSize,
+      }
+    );  
+
     revalidatePath(path);
     return parseStringify(newFile);
   } catch (error) {
@@ -193,6 +211,27 @@ export const deleteFile = async ({
   }
 };
 
+export const getAllFiles = async (limit: number, offset: number) => {
+
+  const { databases } = await createAdminClient();
+
+  const allFiles = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.filesCollectionId,
+    [Query.limit(limit), Query.offset(offset), Query.orderDesc('$createdAt')]
+  )
+
+  if(allFiles.total === 0) {
+    console.log("No files found");
+    return {allFiles: [], total: 0}
+  }
+
+  return {
+    allFiles: allFiles.documents,
+    total: allFiles.total,
+  }
+}
+
 // ============================== TOTAL FILE SPACE USED
 export async function getTotalSpaceUsed() {
   try {
@@ -215,7 +254,7 @@ export async function getTotalSpaceUsed() {
       used: 0,
       all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
     };
-
+    
     files.documents.forEach((file) => {
       const fileType = file.type as FileType;
       totalSpace[fileType].size += file.size;
@@ -234,3 +273,49 @@ export async function getTotalSpaceUsed() {
     handleError(error, "Error calculating total space used:, ");
   }
 }
+
+export async function getTotalSpaceUsedForAllUsers() {
+  try {
+    const { databases } = await createAdminClient();
+
+    const files = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId
+    );
+
+    const totalSpace = {
+      image: { size: 0, latestDate: "" },
+      document: { size: 0, latestDate: "" },
+      video: { size: 0, latestDate: "" },
+      audio: { size: 0, latestDate: "" },
+      other: { size: 0, latestDate: "" },
+      used: 0,
+      all: 2 * 1024 * 1024 * 1024, // 2GB total bucket storage
+    };
+
+    files.documents.forEach((file: any) => {
+      const fileType = (file.type ?? "other") as FileType;
+
+      if (!totalSpace[fileType]) {
+        totalSpace.other.size += file.size;
+        totalSpace.used += file.size;
+        return;
+      }
+
+      totalSpace[fileType].size += file.size;
+      totalSpace.used += file.size;
+
+      if (
+        !totalSpace[fileType].latestDate ||
+        new Date(file.$updatedAt) > new Date(totalSpace[fileType].latestDate)
+      ) {
+        totalSpace[fileType].latestDate = file.$updatedAt;
+      }
+    });
+
+    return parseStringify(totalSpace);
+  } catch (error) {
+    handleError(error, "Error calculating total space for all users");
+  }
+}
+

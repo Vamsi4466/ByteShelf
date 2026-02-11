@@ -1,5 +1,11 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { AxisModel } from "@syncfusion/ej2-react-charts";
+
+declare interface TrendResult {
+  trend: "increment" | "decrement" | "no change";
+  percentage: number;
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,10 +30,48 @@ export const convertFileSize = (sizeInBytes: number, digits?: number) => {
   }
 };
 
+export const bytesToGB = (bytes: number, digits: number = 2): number => {
+  const gb = bytes / (1024 * 1024 * 1024);
+  return Number(gb.toFixed(digits));
+};
+
 export const calculatePercentage = (sizeInBytes: number) => {
   const totalSizeInBytes = 2 * 1024 * 1024 * 1024; // 2GB in bytes
   const percentage = (sizeInBytes / totalSizeInBytes) * 100;
   return Number(percentage.toFixed(2));
+};
+
+export function parseFileData(jsonString: string): File | null {
+    try {
+        const data: File = JSON.parse(jsonString);
+
+        return data;
+    } catch (error) {
+        console.error("Failed to parse trip data:", error);
+        return null;
+    }
+}
+
+export const calculateTrendPercentage = (
+    countOfThisMonth: number,
+    countOfLastMonth: number
+): TrendResult => {
+    if (countOfLastMonth === 0) {
+        return countOfThisMonth === 0
+            ? { trend: "no change", percentage: 0 }
+            : { trend: "increment", percentage: 100 };
+    }
+
+    const change = countOfThisMonth - countOfLastMonth;
+    const percentage = Math.abs((change / countOfLastMonth) * 100);
+
+    if (change > 0) {
+        return { trend: "increment", percentage };
+    } else if (change < 0) {
+        return { trend: "decrement", percentage };
+    } else {
+        return { trend: "no change", percentage: 0 };
+    }
 };
 
 export const getFileType = (fileName: string) => {
@@ -183,6 +227,33 @@ export const constructDownloadUrl = (bucketFileId: string) => {
 };
 
 // DASHBOARD UTILS
+
+export const getSizeSummary = (totalSpace: any) =>{
+  const sizeSummary =  {
+      document: bytesToGB(totalSpace.document.size),
+      image: bytesToGB(totalSpace.image.size),
+      media: bytesToGB(totalSpace.audio.size + totalSpace.video.size),
+      other: bytesToGB(totalSpace.other.size),
+  }
+
+  return Object.entries(sizeSummary).map(([type, count]) => ({
+        count: Number(count),
+        type,
+    }));
+}
+
+export function formatBytes(bytes: number) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
+}
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString();
+}
+
 export const getUsageSummary = (totalSpace: any) => {
   return [
     {
@@ -233,3 +304,40 @@ export const getFileTypesParams = (type: string) => {
       return ["document"];
   }
 };
+
+export const userXAxis: AxisModel = { valueType: "Category", title: "Day" };
+export const useryAxis: AxisModel = {
+  minimum: 0,
+  maximum: 50,
+  interval: 2,
+  title: "Count",
+};
+
+export const fileXAxis: AxisModel = { valueType: "Category", title: "File Type" };
+export const fileyAxis: AxisModel = {
+  minimum: 0,
+  maximum: 50,
+  interval: 2,
+  title: "Count",
+};
+
+export const typeXAxis: AxisModel = { valueType: "Category", title: "File Type" };
+export const typeyAxis: AxisModel = {
+  minimum: 0,
+  maximum: 50,
+  interval: 2,
+  title: "size in GB",
+};
+
+// export const fileXAxis: AxisModel = {
+//   valueType: "Category",
+//   title: "File Type",
+//   majorGridLines: { width: 0 },
+// };
+
+// export const fileyAxis: AxisModel = {
+//   minimum: 0,
+//   maximum: 50,
+//   interval: 2,
+//   title: "Count",
+// };

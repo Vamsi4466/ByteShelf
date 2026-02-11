@@ -51,6 +51,8 @@ export const createAccount = async ({
 
   if (!existingUser) {
     const { databases } = await createAdminClient();
+    const filesCount = 0;
+    const storageUsed = 0;
 
     await databases.createDocument(
       appwriteConfig.databaseId,
@@ -61,6 +63,9 @@ export const createAccount = async ({
         email,
         avatar: avatarPlaceholderUrl,
         accountId,
+        joinedAt: new Date().toISOString(),
+        filesCount,
+        storageUsed,
       },
     );
   }
@@ -141,3 +146,40 @@ export const signInUser = async ({ email }: { email: string }) => {
     handleError(error, "Failed to sign in user");
   }
 };
+
+export const getAllUsers = async (
+  limit: number,
+  offset: number,
+  searchText?: string
+) => {
+  try {
+    const { databases } = await createAdminClient();
+
+    const queries = [
+      Query.limit(limit),
+      Query.offset(offset),
+    ];
+
+    if (searchText && searchText.trim() !== "") {
+      queries.push(
+        Query.or([
+          Query.contains("fullName", searchText),
+          Query.contains("email", searchText),
+        ])
+      );
+    }
+
+    const { documents: users, total } =
+      await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.usersCollectionId,
+        queries
+      );
+
+    return { users, total };
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return { users: [], total: 0 };
+  }
+};
+
