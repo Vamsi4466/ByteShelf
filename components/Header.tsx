@@ -19,9 +19,11 @@ const Header = ({
     <header className="header">
       <Search />
       <div className="header-wrapper">
-        <Link href="/dashboard">
-          <p className="text-brand-100 hover:text-brand">AdminPanel</p>
-        </Link>
+        { status === "admin" && (
+          <Link href="/dashboard">
+            <p className="text-brand-100 hover:text-brand">AdminPanel</p>
+          </Link>
+        )}
         <FileUploader ownerId={userId} accountId={accountId} />
         <form
           action={async () => {
