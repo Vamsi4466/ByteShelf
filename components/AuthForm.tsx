@@ -22,28 +22,24 @@ import OtpModal from "@/components/OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 
-const authFormSchema = (formType: FormType) => {
-  return z.object({
+const authFormSchema = (formType: FormType) =>
+  z.object({
     email: z.string().email(),
     fullName:
       formType === "sign-up"
         ? z.string().min(2).max(50)
         : z.string().optional(),
   });
-};
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [accountId, setAccountId] = useState(null);
+  const [accountId, setAccountId] = useState<string | null>(null);
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      fullName: "",
-      email: "",
-    },
+    defaultValues: { fullName: "", email: "" },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -70,29 +66,33 @@ const AuthForm = ({ type }: { type: FormType }) => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
-          <h1 className="form-title">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex max-h-[800px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8"
+        >
+          <h1 className="text-[34px] leading-[42px] font-bold text-center text-light-100 md:text-left">
             {type === "sign-in" ? "Sign In" : "Sign Up"}
           </h1>
+
           {type === "sign-up" && (
             <FormField
               control={form.control}
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <div className="shad-form-item">
-                    <FormLabel className="shad-form-label">Full Name</FormLabel>
-
+                  <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1">
+                    <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full">
+                      Full Name
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your full name"
-                        className="shad-input"
+                        className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal"
                         {...field}
                       />
                     </FormControl>
                   </div>
-
-                  <FormMessage className="text-gray-700" />
+                  <FormMessage className="text-red text-[14px] leading-[20px] font-normal ml-4" />
                 </FormItem>
               )}
             />
@@ -103,30 +103,29 @@ const AuthForm = ({ type }: { type: FormType }) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <div className="shad-form-item">
-                  <FormLabel className="shad-form-label">Email</FormLabel>
-
+                <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-drop-1">
+                  <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full">
+                    Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
-                      className="shad-input"
+                      className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal"
                       {...field}
                     />
                   </FormControl>
                 </div>
-
-                <FormMessage className="shad-form-message" />
+                <FormMessage className="text-red text-[14px] leading-[20px] font-normal ml-4" />
               </FormItem>
             )}
           />
 
           <Button
             type="submit"
-            className="form-submit-button"
+            className="bg-brand hover:bg-brand-100 transition-all rounded-full text-[14px] leading-[20px] font-medium h-[66px]"
             disabled={isLoading}
           >
             {type === "sign-in" ? "Sign In" : "Sign Up"}
-
             {isLoading && (
               <Image
                 src="/assets/icons/loader.svg"
@@ -138,9 +137,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
             )}
           </Button>
 
-          {errorMessage && <p className="error-message">*{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-[14px] leading-[20px] font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error">
+              *{errorMessage}
+            </p>
+          )}
 
-          <div className="body-2 flex justify-center">
+          <div className="text-[14px] leading-[20px] font-normal flex justify-center">
             <p className="text-light-100">
               {type === "sign-in"
                 ? "Don't have an account?"
@@ -150,7 +153,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
               href={type === "sign-in" ? "/sign-up" : "/sign-in"}
               className="ml-1 font-medium text-brand"
             >
-              {" "}
               {type === "sign-in" ? "Sign Up" : "Sign In"}
             </Link>
           </div>

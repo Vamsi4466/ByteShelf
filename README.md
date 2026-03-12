@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# ByteShelf
 
-## Getting Started
+ByteShelf is a modern cloud storage dashboard built with **Next.js (App Router)** and **Appwrite**. It enables users to securely upload, organize, share, and manage files through a clean and responsive web interface.
 
-First, run the development server:
+---
+
+## 🚀 Key Features
+
+- ✅ Passwordless email login via **OTP**
+- ✅ Upload files with drag & drop support
+- ✅ Share files with other users by email
+- ✅ Rename / delete / download files
+- ✅ Live storage usage dashboard (per-user quota)
+- ✅ Admin analytics: user growth, file type breakdown, storage stats
+- ✅ Mobile-friendly UI with responsive navigation
+
+---
+
+## 🗂️ Tech Stack
+
+- **Next.js 15** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **Appwrite** (Authentication, Database, Storage)
+- **Syncfusion Charts**
+
+---
+
+## 🧩 Project Structure (Highlights)
+
+- `app/` – app routes
+  - `(auth)` – sign-in / sign-up
+  - `(root)` – file browsing, dashboard
+  - `(admin)` – admin dashboard + user management
+- `components/` – UI components (upload, cards, modals, charts, etc.)
+- `lib/` – Appwrite clients + action handlers + utilities
+- `constants/` – navigation, dropdown actions, limits
+
+---
+
+## 🛠️ Setup
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment variables
+
+Copy `.env.example` to `.env.local` and fill in your Appwrite values:
+
+```env
+NEXT_PUBLIC_APPWRITE_ENDPOINT=
+NEXT_PUBLIC_APPWRITE_PROJECT=
+NEXT_PUBLIC_APPWRITE_DATABASE=
+NEXT_PUBLIC_APPWRITE_USERS_COLLECTION=
+NEXT_PUBLIC_APPWRITE_FILES_COLLECTION=
+NEXT_PUBLIC_APPWRITE_BUCKET=
+NEXT_APPWRITE_KEY=
+NEXT_PUBLIC_SYNCFUSION_LICENSE_KEY=
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Screenshots
 
-## Learn More
+### Admin Dashboard
 
-To learn more about Next.js, take a look at the following resources:
+![Admin Dashboard (part 1)](screenshots/admin-dashboard(part-1).png)
+![Admin Dashboard (part 2)](screenshots/admin-dashboard(part-2).png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Admin User Management
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![All Users](screenshots/admin-allUsers-page.png)
 
-## Deploy on Vercel
+### File Browser
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![Files Page](screenshots/files-page.png)
+![File List](screenshots/files.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### File Actions
+
+![Rename File](screenshots/rename.png)
+![Delete Confirmation](screenshots/delete-dialog.png)
+![Details Modal](screenshots/details-dialog.png)
+![Share Modal](screenshots/share-dialog.png)
+
+### Additional Screenshots
+
+![Screenshot 1](screenshots/Screenshot 2026-02-12 090224.png)
+![Screenshot 2](screenshots/Screenshot 2026-02-12 090421.png)
+![Screenshot 3](screenshots/Screenshot 2026-02-12 090727.png)
+![Screenshot 4](screenshots/Screenshot 2026-02-12 090847.png)
+
+---
+
+## 📝 Usage
+
+1. Sign up / sign in with your email.
+2. Upload files in the dashboard.
+3. Browse files by category (Documents, Images, Media, Others).
+4. Use the action menu on each file to rename, share, download, or delete.
+
+---
+
+## 🚀 Deployment
+
+Build for production:
+
+```bash
+npm run build
+npm run start
+```
+
+To deploy on Vercel:
+
+1. Push to GitHub.
+2. Import the repo in Vercel.
+3. Set the required environment variables.
+4. Deploy.
