@@ -7,7 +7,7 @@ ByteShelf is a modern cloud storage dashboard built with **Next.js (App Router)*
 ## 🚀 Key Features
 
 - ✅ Passwordless email login via **OTP**
-- ✅ Upload files with drag & drop support
+- ✅ Upload files
 - ✅ Share files with other users by email
 - ✅ Rename / delete / download files
 - ✅ Live storage usage dashboard (per-user quota)
